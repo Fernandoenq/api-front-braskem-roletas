@@ -1,0 +1,74 @@
+
+/* Aba Login */
+
+/* Estilos para telas grandes (ex: 4K) */
+@media (min-width: 2000px) { /*2000 pra cima*/
+    .my-custom-keyboard .hg-button {
+        background-color: #f5f5f5; /* Cor de fundo das teclas em 4K */
+        color: black; /* Cor do texto das teclas em 4K */
+        font-size: 3rem; /* Aumenta o tamanho da fonte em 4K */
+        padding: 45px; /* Aumenta o padding das teclas em 4K */
+    }
+
+    .my-custom-keyboard {
+        
+        padding: 30px; /* Aumenta o padding ao redor do teclado em 4K */
+        height: 530px; /* Controla a altura total do teclado em 4K */
+    }
+}
+
+/* Estilos para telas médias (ex: Full HD) */
+@media (min-width: 1900px) and (max-width: 1999px) {
+    .my-custom-keyboard .hg-button {
+        background-color: #e0e0e0; /* Cor de fundo das teclas em Full HD */
+        color: black; /* Cor do texto das teclas em Full HD */
+        font-size: 1.5rem; /* Tamanho da fonte em Full HD */
+        padding: 12px; /* Padding das teclas em Full HD */
+    }
+
+    .my-custom-keyboard {
+        background-color: gray; /* Cor de fundo do teclado em Full HD */
+        padding: 15px; /* Padding ao redor do teclado em Full HD */
+        height: 530px; /* Controla a altura total do teclado em Full HD */
+    }
+}
+
+/* Estilos para telas menores (ex: HD ou menores) */
+@media (max-width: 1899px) {
+    .my-custom-keyboard .hg-button {
+        background-color: #f5f5f5; /* Cor de fundo das teclas para telas menores */
+        color: black; /* Cor do texto das teclas para telas menores */
+        font-size: 1.5rem; /* Tamanho da fonte para telas menores */
+        padding: 8px; /* Padding das teclas para telas menores */
+    }
+
+    .my-custom-keyboard {
+        padding: 10px; /* Padding ao redor do teclado para telas menores */
+        height: 240px; /* Controla a altura total do teclado para telas menores */
+    }
+}
+@media (max-width: 1000px) {
+    .my-custom-keyboard .hg-button {
+        background-color: #f5f5f5; /* Cor de fundo das teclas para telas menores */
+        color: black; /* Cor do texto das teclas para telas menores */
+        font-size: 1rem; /* Tamanho da fonte para telas menores */
+        padding: 1px; /* Padding das teclas para telas menores */
+    }
+
+    .my-custom-keyboard {
+        padding: 10px; /* Padding ao redor do teclado para telas menores */
+        height: 240px; /* Controla a altura total do teclado para telas menores */
+    }
+}
+
+.my-custom-keyboard .hg-button:hover {
+    background-color: #ff6200; /* Cor das teclas ao passar o mouse por cima */
+    color: #ffffff; /* Cor do texto ao passar o mouse por cima */
+}
+
+.my-custom-keyboard .hg-button:active {
+    background-color: #ff6200; /* Cor das teclas ao clicar */
+    color: #ffffff; /* Cor do texto ao clicar */
+}
+
+/* Fim Aba Login */
