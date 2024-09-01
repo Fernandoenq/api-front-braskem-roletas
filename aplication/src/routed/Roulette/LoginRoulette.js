@@ -38,7 +38,7 @@ function LoginForm() {
         IsRegistered: formData.isRegistered
       };
 
-      const response = await fetch('http://192.168.100.9:3333//Award/RegisterPerson', { // Substitua pela URL do seu endpoint
+      const response = await fetch('http://127.0.0.1:3333//Award/RegisterPerson', { // Substitua pela URL do seu endpoint
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

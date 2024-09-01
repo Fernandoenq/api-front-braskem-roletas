@@ -119,7 +119,7 @@ function Roulette() {
     };
 
     try {
-        const response = await fetch(`http://192.168.100.9:3333//Award/RescueAward`, {
+        const response = await fetch(`http://127.0.0.1:3333//Award/RescueAward`, {
             method: 'PUT', // Método PUT para enviar os dados
             headers: {
                 'Content-Type': 'application/json'
