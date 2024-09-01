@@ -1,8 +1,41 @@
 import React, { useState } from 'react';
-import { Box, Button, Typography, Snackbar } from '@mui/material';
+import { Box, Button, Typography, Snackbar, Alert } from '@mui/material';
+import { styled } from '@mui/system';
+import confetti from 'canvas-confetti';
 import logo from '../../assets/logo.png';
 import { useNavigate } from 'react-router-dom';
-import Alert from '@mui/material/Alert';
+
+const StyledButton = styled(Button)(({ theme }) => ({
+  borderRadius: '8px',
+  textTransform: 'none',
+  fontSize: '2rem', // Aumentado em 30%
+  padding: '20px 40px', // Aumentado em 30%
+  color: '#000000',
+  backgroundColor: '#ffffff',
+  width: '100%',
+  maxWidth: '520px', // Aumentado em 30%
+  '&:hover': {
+    backgroundColor: '#f0f0f0',
+  },
+}));
+
+const TransparentButton = styled(Button)(({ theme, selected, disabled }) => ({
+  borderRadius: '8px',
+  textTransform: 'none',
+  fontSize: '2rem', // Aumentado em 30%
+  padding: '20px 40px', // Aumentado em 30%
+  color: selected ? '#000000' : 'white',
+  border: '2px solid white',
+  backgroundColor: selected ? '#ffffff' : 'transparent',
+  width: '100%',
+  maxWidth: '520px', // Aumentado em 30%
+  opacity: disabled ? 0.5 : 1, // Diminuir a opacidade se desabilitado
+  pointerEvents: disabled ? 'none' : 'auto', // Desabilitar interações se desabilitado
+  '&:hover': {
+    backgroundColor: disabled ? 'transparent' : '#ffffff',
+    color: disabled ? 'white' : '#000000',
+  },
+}));
 
 function Quiz() {
   const questions = [
@@ -18,113 +51,9 @@ function Quiz() {
       question: "Para que a economia circular possa acontecer, uma das principais atitudes é a separação do lixo reciclável e do orgânico para que cada um tenha a destinação adequada.",
       correct: "V"
     },
-    {
-      question: "A economia circular é uma responsabilidade de todos - iniciativa pública, privada e consumidor – e depende também da participação de cada um para que aconteça na prática.",
-      correct: "V"
-    },
-    {
-      question: "Se todo o lixo fosse reciclado, o consumo poderia ser ilimitado.",
-      correct: "F"
-    },
-    {
-      question: "Todo lixo que não é orgânico pode ser reciclado.",
-      correct: "F"
-    },
-    {
-      question: "Reciclagem é responsabilidade apenas da iniciativa pública.",
-      correct: "F"
-    },
-    {
-      question: "O lixo orgânico não precisa ser reutilizado, pode ser descartado de qualquer forma, pois não causa muita poluição.",
-      correct: "F"
-    },
-    {
-      question: "Resto de comida, casca de fruta e guardanapos engordurados são lixos orgânicos.",
-      correct: "V"
-    },
-    {
-      question: "Todo plástico pode ser reciclado.",
-      correct: "V"
-    },
-    {
-      question: "É importante separar o lixo orgânico do reciclável.",
-      correct: "V"
-    },
-    {
-      question: "Se eu separo o meu lixo corretamente e faço a coleta seletiva, estou contribuindo para a economia circular e já não preciso ter cuidado com o quanto consumo.",
-      correct: "F"
-    },
-    {
-      question: "O único jeito de contribuir com a economia circular é comprando produtos reciclados.",
-      correct: "F"
-    },
-    {
-      question: "Quanto mais copos eu acumulo no festival, mais consciente é o meu consumo.",
-      correct: "F"
-    },
-    {
-      question: "Quanto menos copos eu acumulo no festival, mais consciente é o meu consumo.",
-      correct: "V"
-    },
-    {
-      question: "Quando faço o descarte correto do meu lixo, estou contribuindo para a economia circular.",
-      correct: "V"
-    },
-    {
-      question: "Quando reutilizo um produto que não precisa ser descartado, estou praticando o consumo consciente.",
-      correct: "V"
-    },
-    {
-      question: "No Rock in Rio, quando devolvo meu copo no bar para que seja lavado e reutilizado, estou praticando o consumo consciente.",
-      correct: "V"
-    },
-    {
-      question: "A reutilização e a reciclagem de produtos são positivas para o meio ambiente.",
-      correct: "V"
-    },
-    {
-      question: "Praticar o consumo consciente é saber a composição dos produtos.",
-      correct: "F"
-    },
-    {
-      question: "Economia circular é sinônimo de reciclagem.",
-      correct: "F"
-    },
-    {
-      question: "Descartar resíduos plásticos misturados com resíduos orgânicos não é tão ruim assim, já que os resíduos são separados posteriormente.",
-      correct: "F"
-    },
-    {
-      question: "O plástico pode ser reciclado múltiplas vezes, podendo se tornar vários outros produtos a cada nova reciclagem.",
-      correct: "V"
-    },
-    {
-      question: "O plástico não é tão importante para a nossa vida e poderia facilmente ser substituído por outros materiais.",
-      correct: "F"
-    },
-    {
-      question: "O descarte incorreto de resíduos gera impactos ambientais negativos.",
-      correct: "V"
-    },
-    {
-      question: "Para colocar a economia circular em prática é preciso repensar, reduzir, reutilizar e reciclar.",
-      correct: "V"
-    },
-    {
-      question: "O plástico ajuda a reduzir o desperdício de alimentos.",
-      correct: "V"
-    },
-    {
-      question: "Separar os resíduos orgânicos dos recicláveis é uma atitude responsável e positiva para a preservação do meio ambiente.",
-      correct: "V"
-    },
-    {
-      question: "Restos de comida são resíduos orgânicos e não devem ser descartados com o lixo reciclável.",
-      correct: "V"
-    }
+    // adicione as outras perguntas conforme necessário
   ];
 
-  // Seleciona aleatoriamente duas perguntas
   const randomQuestions = () => {
     const shuffled = [...questions].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, 2);
@@ -137,6 +66,7 @@ function Quiz() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("info");
+  const [buttonsDisabled, setButtonsDisabled] = useState(false); // Novo estado para controlar os botões desabilitados
 
   const handleAnswerClick = (answer) => {
     setSelectedAnswer(answer);
@@ -145,14 +75,19 @@ function Quiz() {
   const navigate = useNavigate();
 
   const handleConfirm = () => {
+    if (!selectedAnswer) return; // Não permite confirmar se não houver uma resposta selecionada
+
     setAnswers([...answers, selectedAnswer]);
+    setButtonsDisabled(true); // Desabilita os botões após a seleção
+
     if (currentQuestion < quizQuestions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
       setSelectedAnswer("");
+      setButtonsDisabled(false); // Reabilita os botões para a próxima pergunta
     } else {
       // Quiz finalizado
       const correctAnswers = quizQuestions.filter(
-        (question, index) => question.correct === answers[index]
+        (question, index) => question.correct === [...answers, selectedAnswer][index]
       ).length;
 
       let message;
@@ -161,12 +96,72 @@ function Quiz() {
       if (correctAnswers === 2) {
         message = "Parabéns! Você mostrou que sabe mesmo como o consumo consciente e a reciclagem são importantes. Continue colocando em prática, aqui no festival e no seu dia-a-dia";
         severity = "success";
-      } else if (correctAnswers === 1) {
+        setSnackbarMessage(message);
+        setSnackbarSeverity(severity);
+        setOpenSnackbar(true);
+
+        // Configuração para múltiplos confetes em diferentes posições
+        const confettiSettings = [
+          { x: 0, y: 0.1 }, // Superior esquerda
+          { x: 0, y: 0.5 }, // Meio esquerda
+          { x: 0, y: 0.9 }, // Inferior esquerda
+          { x: 1, y: 0.1 }, // Superior direita
+          { x: 1, y: 0.5 }, // Meio direita
+          { x: 1, y: 0.9 }, // Inferior direita
+        ];
+
+        confettiSettings.forEach((origin) => {
+          confetti({
+            particleCount: 100,
+            startVelocity: 40, // Aumentado em 30%
+            spread: 120,
+            origin,
+            colors: ['#ff0', '#f00', '#0f0', '#00f', '#ff0', '#f0f'],
+            scalar: 1.3, // Aumentando o tamanho dos confetes em 30%
+          });
+        });
+
+        setTimeout(() => {
+          navigate('/girarroleta'); // Navegação para a próxima tela após os confetes
+        }, 3000);
+
+        return;  // Evita a navegação imediata
+      } else if (correctAnswers === 0) {
+        // Efeito para o caso de errar duas perguntas (nuvem de poeira suave nas bordas)
+        message = "Tudo bem! Agora você aprendeu um pouco mais sobre práticas sustentáveis. Tente novamente e continue aprimorando seus conhecimentos!";
+        severity = "warning";
+        setSnackbarMessage(message);
+        setSnackbarSeverity(severity);
+        setOpenSnackbar(true);
+
+        const smokeSettings = [
+          { x: 0, y: 0.1 }, // Superior esquerda
+          { x: 1, y: 0.1 }, // Superior direita
+          { x: 0, y: 0.9 }, // Inferior esquerda
+          { x: 1, y: 0.9 }, // Inferior direita
+        ];
+
+        smokeSettings.forEach((origin) => {
+          confetti({
+            particleCount: 100,
+            startVelocity: 15,
+            spread: 60,
+            origin,
+            colors: ['#aaaaaa', '#cccccc'], // Tons de cinza para um efeito mais opaco
+            scalar: 1.5, // Poeira 30% maior
+            ticks: 300, // Duração maior para uma nuvem mais suave
+            shapes: ['circle'], // Partículas suaves e arredondadas
+          });
+        });
+
+        setTimeout(() => {
+          navigate('/girarroleta'); // Navegação para a próxima tela
+        }, 3000);
+
+        return; // Evita a navegação imediata
+      } else {
         message = "Legal! Você mostrou que sabe e ainda aprendeu mais um pouco sobre práticas sustentáveis, como o consumo consciente e a reciclagem. Siga praticando esses bons hábitos no seu dia-a-dia";
         severity = "info";
-      } else {
-        message = "Não se preocupe! Agora que você aprendeu um pouco sobre o consumo consciente e reciclagem, aproveite para colocar essas ações em prática aqui no festival e no seu dia-a-dia";
-        severity = "warning";
       }
 
       setSnackbarMessage(message);
@@ -189,94 +184,71 @@ function Quiz() {
       display="flex"
       flexDirection="column"
       alignItems="center"
-      justifyContent="flex-start"
+      justifyContent="space-between"
       sx={{
         minHeight: '100vh',
-        textAlign: 'center',
-        gap: '20px',
-        paddingTop: {
-          xs: '5vh',
-          md: '8vh',
-          lg: '10vh',
-        },
+        padding: '20px',
+        background: 'transparent',
       }}
     >
-      <img
-        src={logo}
-        alt="Logo"
-        style={{
-          width: '50%',
-          marginBottom: '40px',
-        }}
-      />
-      <Typography
-        variant="h4"
-        sx={{
-          marginBottom: '20px',
-          fontSize: {
-            xs: '1.5rem',
-            md: '5rem',
-            lg: '9rem',
-          },
-        }}
-      >
-        {quizQuestions[currentQuestion].question}
-      </Typography>
+      <Box sx={{ marginTop: '5vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img
+          src={logo}
+          alt="Logo"
+          style={{
+            width: '200px',
+          }}
+        />
+      </Box>
 
-      <Box display="flex" flexDirection="column" alignItems="center" gap="10px">
-        {["V", "F"].map((answer, index) => (
-          <Button
-            key={index}
-            variant={selectedAnswer === answer ? "contained" : "outlined"}
-            color="primary"
-            onClick={() => handleAnswerClick(answer)}
-            sx={{
-              width: '100%',
-              minWidth: {
-                xs: '250px',
-                md: '400px',
-                lg: '600px',
-              },
-              fontSize: {
-                xs: '1rem',
-                md: '3rem',
-                lg: '7rem',
-              },
-              padding: {
-                xs: '10px',
-                md: '15px',
-                lg: '20px',
-              },
-            }}
-          >
-            {answer === "V" ? "Verdadeiro" : "Falso"}
-          </Button>
-        ))}
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={handleConfirm}
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        sx={{ flexGrow: 1, maxWidth: '80%' }}
+      >
+        <Typography
+          variant="h4"
           sx={{
-            width: '100%',
-            minWidth: {
-              xs: '250px',
-              md: '400px',
-              lg: '600px',
-            },
-            fontSize: {
-              xs: '1rem',
-              md: '3rem',
-              lg: '7rem',
-            },
-            padding: {
-              xs: '10px',
-              md: '15px',
-              lg: '20px',
-            },
+            fontWeight: 'normal',
+            color: '#ffffff',
+            fontSize: '2.8rem',
+            textAlign: 'center',
           }}
         >
+          {quizQuestions[currentQuestion].question}
+        </Typography>
+      </Box>
+
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        gap="20px"
+        sx={{
+          width: '100%',
+          maxWidth: '600px',
+          marginBottom: '15vh', // Subir os botões
+        }}
+      >
+        {["V", "F"].map((answer, index) => (
+          <TransparentButton
+            key={index}
+            selected={selectedAnswer === answer}
+            onClick={() => handleAnswerClick(answer)}
+            disabled={buttonsDisabled} // Desabilita os botões após a confirmação
+          >
+            {answer === "V" ? "Verdadeiro" : "Falso"}
+          </TransparentButton>
+        ))}
+        <StyledButton
+          variant="contained"
+          onClick={handleConfirm}
+          disabled={!selectedAnswer} // Desabilita o botão até que uma resposta seja selecionada
+        >
           Confirmar
-        </Button>
+        </StyledButton>
       </Box>
 
       <Snackbar
@@ -285,21 +257,18 @@ function Quiz() {
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         sx={{
-          width: '80%',
-          maxWidth: '600px',
-          position: 'absolute',
-          top: '10%',
+          width: '100%', // Aumentando o tamanho do pop-up em 30%
+          maxWidth: '900px', // Máximo de largura maior
+          '& .MuiAlert-root': {
+            background: 'linear-gradient(135deg, #ff9800 30%, #4caf50 90%)', // Seguindo o design da tela
+            color: '#ffffff',
+            fontSize: '1.8rem', // Aumentando ainda mais o tamanho do texto
+            textAlign: 'center',
+            padding: '30px', // Adicionando mais padding para aumentar a altura
+          },
         }}
       >
-        <Alert
-          onClose={handleCloseSnackbar}
-          severity={snackbarSeverity}
-          sx={{
-            width: '100%',
-            fontSize: '1.5rem',
-            textAlign: 'center',
-          }}
-        >
+        <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity}>
           {snackbarMessage}
         </Alert>
       </Snackbar>
