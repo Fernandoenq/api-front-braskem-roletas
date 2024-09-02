@@ -10,12 +10,12 @@ const StyledButton = styled(Button)(({ theme, disabled }) => ({
   textTransform: 'none',
   fontSize: '2rem',
   padding: '20px 40px',
-  color: disabled ? '#ccc' : '#000000', // Cor do texto ajustada quando o botão está desabilitado
-  backgroundColor: disabled ? '#e0e0e0' : '#ffffff', // Fundo ajustado quando o botão está desabilitado
+  color: disabled ? '#ccc' : '#000000',
+  backgroundColor: disabled ? '#e0e0e0' : '#ffffff',
   width: '100%',
   maxWidth: '520px',
   '&:hover': {
-    backgroundColor: disabled ? '#e0e0e0' : '#f0f0f0', // Hover ajustado para desabilitado
+    backgroundColor: disabled ? '#e0e0e0' : '#f0f0f0',
   },
 }));
 
@@ -75,7 +75,7 @@ function Quiz() {
   const navigate = useNavigate();
 
   const handleConfirm = () => {
-    if (!selectedAnswer || quizFinished) return; // Evita o clique se não houver resposta selecionada ou se o quiz já foi finalizado
+    if (!selectedAnswer || quizFinished) return;
 
     setAnswers([...answers, selectedAnswer]);
     setButtonsDisabled(true);
@@ -119,7 +119,7 @@ function Quiz() {
           });
         });
 
-        setQuizFinished(true); // Sinaliza que o quiz foi finalizado
+        setQuizFinished(true);
       } else if (correctAnswers === 0) {
         message = "Tudo bem! Agora você aprendeu um pouco mais sobre práticas sustentáveis. Tente novamente e continue aprimorando seus conhecimentos!";
         severity = "warning";
@@ -147,7 +147,7 @@ function Quiz() {
           });
         });
 
-        setQuizFinished(true); // Sinaliza que o quiz foi finalizado
+        setQuizFinished(true);
       } else {
         message = "Legal! Você mostrou que sabe e ainda aprendeu mais um pouco sobre práticas sustentáveis, como o consumo consciente e a reciclagem. Siga praticando esses bons hábitos no seu dia-a-dia";
         severity = "info";
@@ -155,7 +155,7 @@ function Quiz() {
         setSnackbarSeverity(severity);
         setOpenSnackbar(true);
 
-        setQuizFinished(true); // Finaliza o quiz
+        setQuizFinished(true);
       }
 
       // Adiciona o redirecionamento após 5 segundos
@@ -181,12 +181,12 @@ function Quiz() {
         background: 'transparent',
       }}
     >
-      <Box sx={{ marginTop: '5vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Box sx={{ marginTop: '1vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <img
           src={logo}
           alt="Logo"
           style={{
-            width: '800px',
+            width: '800px', // Ajuste o tamanho conforme necessário
           }}
         />
       </Box>
@@ -196,7 +196,7 @@ function Quiz() {
         flexDirection="column"
         alignItems="center"
         justifyContent="center"
-        sx={{ flexGrow: 1, maxWidth: '80%' }}
+        sx={{ flexGrow: 1, maxWidth: '80%', marginTop: '0vh' }} // Ajuste de margem superior para subir a pergunta
       >
         <Typography
           variant="h4"
@@ -235,7 +235,7 @@ function Quiz() {
         <StyledButton
           variant="contained"
           onClick={handleConfirm}
-          disabled={!selectedAnswer || quizFinished} // Garante que o botão não possa ser clicado após o quiz ser finalizado
+          disabled={!selectedAnswer || quizFinished}
         >
           Confirmar
         </StyledButton>
