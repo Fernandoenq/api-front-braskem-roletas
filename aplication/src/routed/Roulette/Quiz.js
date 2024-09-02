@@ -5,35 +5,35 @@ import confetti from 'canvas-confetti';
 import logo from '../../assets/logo.png';
 import { useNavigate } from 'react-router-dom';
 
-const StyledButton = styled(Button)(({ theme }) => ({
+const StyledButton = styled(Button)(({ theme, disabled }) => ({
   borderRadius: '8px',
   textTransform: 'none',
-  fontSize: '2rem', // Aumentado em 30%
-  padding: '20px 40px', // Aumentado em 30%
-  color: '#000000',
-  backgroundColor: '#ffffff',
+  fontSize: '2rem',
+  padding: '20px 40px',
+  color: disabled ? '#ccc' : '#000000', // Cor do texto ajustada quando o botão está desabilitado
+  backgroundColor: disabled ? '#e0e0e0' : '#ffffff', // Fundo ajustado quando o botão está desabilitado
   width: '100%',
-  maxWidth: '520px', // Aumentado em 30%
+  maxWidth: '520px',
   '&:hover': {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: disabled ? '#e0e0e0' : '#f0f0f0', // Hover ajustado para desabilitado
   },
 }));
 
 const TransparentButton = styled(Button)(({ theme, selected, disabled }) => ({
   borderRadius: '8px',
   textTransform: 'none',
-  fontSize: '2rem', // Aumentado em 30%
-  padding: '20px 40px', // Aumentado em 30%
-  color: selected ? '#000000' : 'white',
+  fontSize: '2rem',
+  padding: '20px 40px',
+  color: selected ? '#000000' : '#ffffff',
   border: '2px solid white',
   backgroundColor: selected ? '#ffffff' : 'transparent',
   width: '100%',
-  maxWidth: '520px', // Aumentado em 30%
-  opacity: disabled ? 0.5 : 1, // Diminuir a opacidade se desabilitado
-  pointerEvents: disabled ? 'none' : 'auto', // Desabilitar interações se desabilitado
+  maxWidth: '520px',
+  opacity: disabled ? 0.5 : 1,
+  pointerEvents: disabled ? 'none' : 'auto',
   '&:hover': {
     backgroundColor: disabled ? 'transparent' : '#ffffff',
-    color: disabled ? 'white' : '#000000',
+    color: disabled ? '#ffffff' : '#000000',
   },
 }));
 
@@ -51,7 +51,6 @@ function Quiz() {
       question: "Para que a economia circular possa acontecer, uma das principais atitudes é a separação do lixo reciclável e do orgânico para que cada um tenha a destinação adequada.",
       correct: "V"
     },
-    // adicione as outras perguntas conforme necessário
   ];
 
   const randomQuestions = () => {
@@ -66,7 +65,8 @@ function Quiz() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("info");
-  const [buttonsDisabled, setButtonsDisabled] = useState(false); // Novo estado para controlar os botões desabilitados
+  const [buttonsDisabled, setButtonsDisabled] = useState(false);
+  const [quizFinished, setQuizFinished] = useState(false);
 
   const handleAnswerClick = (answer) => {
     setSelectedAnswer(answer);
@@ -75,17 +75,16 @@ function Quiz() {
   const navigate = useNavigate();
 
   const handleConfirm = () => {
-    if (!selectedAnswer) return; // Não permite confirmar se não houver uma resposta selecionada
+    if (!selectedAnswer || quizFinished) return; // Evita o clique se não houver resposta selecionada ou se o quiz já foi finalizado
 
     setAnswers([...answers, selectedAnswer]);
-    setButtonsDisabled(true); // Desabilita os botões após a seleção
+    setButtonsDisabled(true);
 
     if (currentQuestion < quizQuestions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
       setSelectedAnswer("");
-      setButtonsDisabled(false); // Reabilita os botões para a próxima pergunta
+      setButtonsDisabled(false);
     } else {
-      // Quiz finalizado
       const correctAnswers = quizQuestions.filter(
         (question, index) => question.correct === [...answers, selectedAnswer][index]
       ).length;
@@ -100,34 +99,28 @@ function Quiz() {
         setSnackbarSeverity(severity);
         setOpenSnackbar(true);
 
-        // Configuração para múltiplos confetes em diferentes posições
         const confettiSettings = [
-          { x: 0, y: 0.1 }, // Superior esquerda
-          { x: 0, y: 0.5 }, // Meio esquerda
-          { x: 0, y: 0.9 }, // Inferior esquerda
-          { x: 1, y: 0.1 }, // Superior direita
-          { x: 1, y: 0.5 }, // Meio direita
-          { x: 1, y: 0.9 }, // Inferior direita
+          { x: 0, y: 0.1 },
+          { x: 0, y: 0.5 },
+          { x: 0, y: 0.9 },
+          { x: 1, y: 0.1 },
+          { x: 1, y: 0.5 },
+          { x: 1, y: 0.9 },
         ];
 
         confettiSettings.forEach((origin) => {
           confetti({
             particleCount: 100,
-            startVelocity: 40, // Aumentado em 30%
+            startVelocity: 40,
             spread: 120,
             origin,
             colors: ['#ff0', '#f00', '#0f0', '#00f', '#ff0', '#f0f'],
-            scalar: 1.3, // Aumentando o tamanho dos confetes em 30%
+            scalar: 1.3,
           });
         });
 
-        setTimeout(() => {
-          navigate('/girarroleta'); // Navegação para a próxima tela após os confetes
-        }, 3000);
-
-        return;  // Evita a navegação imediata
+        setQuizFinished(true); // Sinaliza que o quiz foi finalizado
       } else if (correctAnswers === 0) {
-        // Efeito para o caso de errar duas perguntas (nuvem de poeira suave nas bordas)
         message = "Tudo bem! Agora você aprendeu um pouco mais sobre práticas sustentáveis. Tente novamente e continue aprimorando seus conhecimentos!";
         severity = "warning";
         setSnackbarMessage(message);
@@ -135,10 +128,10 @@ function Quiz() {
         setOpenSnackbar(true);
 
         const smokeSettings = [
-          { x: 0, y: 0.1 }, // Superior esquerda
-          { x: 1, y: 0.1 }, // Superior direita
-          { x: 0, y: 0.9 }, // Inferior esquerda
-          { x: 1, y: 0.9 }, // Inferior direita
+          { x: 0, y: 0.1 },
+          { x: 1, y: 0.1 },
+          { x: 0, y: 0.9 },
+          { x: 1, y: 0.9 },
         ];
 
         smokeSettings.forEach((origin) => {
@@ -147,31 +140,28 @@ function Quiz() {
             startVelocity: 15,
             spread: 60,
             origin,
-            colors: ['#aaaaaa', '#cccccc'], // Tons de cinza para um efeito mais opaco
-            scalar: 1.5, // Poeira 30% maior
-            ticks: 300, // Duração maior para uma nuvem mais suave
-            shapes: ['circle'], // Partículas suaves e arredondadas
+            colors: ['#aaaaaa', '#cccccc'],
+            scalar: 1.5,
+            ticks: 300,
+            shapes: ['circle'],
           });
         });
 
-        setTimeout(() => {
-          navigate('/girarroleta'); // Navegação para a próxima tela
-        }, 3000);
-
-        return; // Evita a navegação imediata
+        setQuizFinished(true); // Sinaliza que o quiz foi finalizado
       } else {
         message = "Legal! Você mostrou que sabe e ainda aprendeu mais um pouco sobre práticas sustentáveis, como o consumo consciente e a reciclagem. Siga praticando esses bons hábitos no seu dia-a-dia";
         severity = "info";
+        setSnackbarMessage(message);
+        setSnackbarSeverity(severity);
+        setOpenSnackbar(true);
+
+        setQuizFinished(true); // Finaliza o quiz
       }
 
-      setSnackbarMessage(message);
-      setSnackbarSeverity(severity);
-      setOpenSnackbar(true);
-
-      // Navega para a próxima página após 3 segundos
+      // Adiciona o redirecionamento após 5 segundos
       setTimeout(() => {
         navigate('/girarroleta');
-      }, 3000);
+      }, 5000);
     }
   };
 
@@ -196,7 +186,7 @@ function Quiz() {
           src={logo}
           alt="Logo"
           style={{
-            width: '200px',
+            width: '800px',
           }}
         />
       </Box>
@@ -229,7 +219,7 @@ function Quiz() {
         sx={{
           width: '100%',
           maxWidth: '600px',
-          marginBottom: '15vh', // Subir os botões
+          marginBottom: '15vh',
         }}
       >
         {["V", "F"].map((answer, index) => (
@@ -237,7 +227,7 @@ function Quiz() {
             key={index}
             selected={selectedAnswer === answer}
             onClick={() => handleAnswerClick(answer)}
-            disabled={buttonsDisabled} // Desabilita os botões após a confirmação
+            disabled={buttonsDisabled}
           >
             {answer === "V" ? "Verdadeiro" : "Falso"}
           </TransparentButton>
@@ -245,7 +235,7 @@ function Quiz() {
         <StyledButton
           variant="contained"
           onClick={handleConfirm}
-          disabled={!selectedAnswer} // Desabilita o botão até que uma resposta seja selecionada
+          disabled={!selectedAnswer || quizFinished} // Garante que o botão não possa ser clicado após o quiz ser finalizado
         >
           Confirmar
         </StyledButton>
@@ -257,14 +247,14 @@ function Quiz() {
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         sx={{
-          width: '100%', // Aumentando o tamanho do pop-up em 30%
-          maxWidth: '900px', // Máximo de largura maior
+          width: '100%',
+          maxWidth: '900px',
           '& .MuiAlert-root': {
-            background: 'linear-gradient(135deg, #ff9800 30%, #4caf50 90%)', // Seguindo o design da tela
+            background: 'linear-gradient(135deg, #ff9800 30%, #4caf50 90%)',
             color: '#ffffff',
-            fontSize: '1.8rem', // Aumentando ainda mais o tamanho do texto
+            fontSize: '1.8rem',
             textAlign: 'center',
-            padding: '30px', // Adicionando mais padding para aumentar a altura
+            padding: '30px',
           },
         }}
       >
