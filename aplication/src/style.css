@@ -71,4 +71,13 @@
     color: #ffffff; /* Cor do texto ao clicar */
 }
 
+/* Defina o estilo personalizado para o teclado */
+.myTheme .hg-button {
+    color: black !important;  /* Define o texto do teclado para preto */
+  }
+  
+  .myTheme {
+    width: 105%;
+}
+  
 /* Fim Aba Login */

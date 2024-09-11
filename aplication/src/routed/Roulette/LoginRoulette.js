@@ -37,6 +37,7 @@ function LoginForm() {
         Mail: formData.mail,
         IsRegistered: formData.isRegistered
       };
+      console.log(payload);
 
       const response = await fetch('http://127.0.0.1:3333//Award/RegisterPerson', { // Substitua pela URL do seu endpoint
         method: 'POST',

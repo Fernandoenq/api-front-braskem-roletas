@@ -10,6 +10,7 @@ import LoginForm from './routed/Roulette/LoginRoulette';
 import Quiz from './routed/Roulette/Quiz';
 import Roulette from './routed/Roulette/SpinRoulette';
 import GetPremium from './routed/Roulette/GetPremium';
+import ConfigPage from './routed/ConfigPage';
 
 const customTheme = createTheme({
   palette: {
@@ -41,6 +42,7 @@ function App() {
               <Route path="/Quiz" element={<Quiz />} />
               <Route path="/girarroleta" element={<Roulette />} />
               <Route path="/GetPremium" element={<GetPremium />} />
+              <Route path="/config" element={<ConfigPage />} />
             </Routes>
           </Box>
         </BrowserRouter>

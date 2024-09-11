@@ -1,49 +1,48 @@
 .roulette-container {
-    position: relative;
-    width: 60vw; /* Usando vw para ajustar a largura */
-    height: 60vw; /* Usando vw para ajustar a altura */
-    margin: 0 auto; /* Centraliza horizontalmente */
-  }
-  
-  .roulette {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    transform-origin: center center; /* Gira em torno do centro */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    transition: transform 3s ease-out; /* Define a transição para a rotação */
-    position: relative;
-    z-index: 2; /* Define um índice z maior para a roleta */
-  }
-  
-  .pin {
-    position: absolute;
-    top: -5%; /* Usando % para ajustar a posição do pino */
-    left: 50%;
-    transform: translateX(-50%) rotate(180deg); /* Deixa o pino sem rotação */
-    width: 0;
-    height: 0;
-    border-left: 2.5vw solid transparent;
-    border-right: 2.5vw solid transparent;
-    border-bottom: 5vw solid red; /* Mantém o triângulo apontando para baixo */
-    z-index: 3; /* Garante que o pino fique à frente da roleta */
-  }
-  
-  .static-overlay {
-    position: absolute;
-    top: 49%;
-    left: 52%;
-    width: 75vw; /* Aumenta o tamanho da imagem para ser maior que a roleta */
-    height: 78vw; /* Mantém a proporção com a largura */
-    transform: translate(-50%, -50%); /* Centraliza a imagem maior */
-    z-index: 1; /* Coloca a imagem estática atrás da roleta e do pino */
-  }
-  
-  .static-overlay img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%; /* Mantém a imagem em formato circular */
-  }
-  
+  position: relative;
+  width: 50vw; /* Largura do container da roleta */
+  height: 50vw; /* Altura do container da roleta */
+  margin: 0 auto; /* Centraliza horizontalmente */
+}
+
+.roulette {
+  width: 96.6%; /* Ajuste fino para centralizar melhor */
+  height: 96%; /* Ajuste fino para centralizar melhor */
+  transform-origin: center center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: transform 3s ease-out;
+  position: relative;
+  z-index: 2; /* Na frente da base estática */
+  top: 2.5%; /* Pequeno ajuste para mover a roleta para baixo */
+  left: 1.5%; /* Mova a roleta mais para a esquerda */
+  transform: translate(-50%, 0); /* Centraliza a roleta no novo ponto à esquerda */
+}
+
+
+.pin {
+  position: absolute;
+  top: -10%; /* Mantém o pino logo acima da roleta */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3; /* Certifica que o pino está na frente */
+}
+
+
+
+.static-overlay {
+  position: absolute;
+  top: 58%; /* Ajuste fino para centralizar a base estática */
+  left: 54.3%;
+  width: 148%; /* Largura da base */
+  height: 156%; /* Altura da base */
+  transform: translate(-50%, -50%); /* Centraliza a base estática */
+  z-index: 1; /* Certifica que a base está atrás da roleta */
+}
+
+.static-overlay img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%; /* Certifica que a base é circular */
+}
