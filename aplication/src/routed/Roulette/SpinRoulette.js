@@ -166,7 +166,7 @@ function Roulette() {
         navigate('/GetPremium'); // Navega para outra página após 5 segundos
         console.log("outra pagina");
       }, 1000); // Espera 5 segundos antes de navegar
-    }, 20000); // Tempo de giro (3 segundos)
+    }, 10000); // Tempo de giro (3 segundos)
   };
   
 
