@@ -131,7 +131,7 @@ function Roulette() {
   
         console.log("segmentAngle");
         console.log(segmentAngle);
-        const spins = Math.floor(Math.random() * 5) + 5; // Define um número aleatório de voltas
+        const spins = 20; // Define um número aleatório de voltas
         const newRotation = spins * 360 + segmentAngle; // Gira a roleta para o ângulo alvo
         setRotation(newRotation);
   
@@ -148,7 +148,7 @@ function Roulette() {
         console.log("giftId");
         console.log("Nao foi dessa vez");
         segmentAngle = 145.5;
-        const spins = Math.floor(Math.random() * 5) + 5; // Define um número aleatório de voltas
+        const spins = 20; // Define um número aleatório de voltas
         const newRotation = spins * 360 + segmentAngle; // Gira a roleta para o ângulo alvo
         setRotation(newRotation);
   
@@ -166,7 +166,7 @@ function Roulette() {
         navigate('/GetPremium'); // Navega para outra página após 5 segundos
         console.log("outra pagina");
       }, 1000); // Espera 5 segundos antes de navegar
-    }, 3000); // Tempo de giro (3 segundos)
+    }, 20000); // Tempo de giro (3 segundos)
   };
   
 

@@ -13,6 +13,7 @@ import fastpass00 from '../../assets/fastpass00.png';
 import ingressoRockInRio from '../../assets/ingressoRockInRio.png';
 import powerBank from '../../assets/powerBank.png';
 import tampacopo from '../../assets/tampacopo.png';  // Adicionar o tampacopo aqui
+import BraskemLogo from '../../assets/BraskemLogo.png';  // Adicionar o tampacopo aqui
 
 function GetPremium() {
   const [isClickable, setIsClickable] = useState(false);
@@ -145,7 +146,21 @@ function GetPremium() {
       >
         OK
       </Button>
+
+      <img
+        src={BraskemLogo} // Exibe a imagem correspondente
+        alt="Logo Braskem"
+        style={{
+          width: '55%',
+          position: 'absolute',
+          right: '10px',  // Posição fixa à direita
+          bottom: '10px',  // Posição fixa na parte inferior
+        }}
+      />
+
     </Box>
+
+    
   );
 }
 
