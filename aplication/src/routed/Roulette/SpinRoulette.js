@@ -83,12 +83,15 @@ function Roulette() {
       if (response.status === 200) {
         const responseData = await response.json();
         console.log('Resposta do servidor:', responseData);
+        console.log('Resposta do servidor:', responseData.Award[0].GiftName);
   
         // Recebe o GiftId e define o segmentAngle com base no GiftId
         const giftId = responseData.Award[0].GiftId;
+        const giftName = responseData.Award[0].GiftName;
   
         // Armazena o giftId no localStorage
         localStorage.setItem('giftId', giftId); // Salva o giftId para ser acessado na próxima página
+        localStorage.setItem('giftName', giftName); // Salva o giftId para ser acessado na próxima página
   
         let segmentAngle;
         console.log("giftId");
@@ -162,7 +165,7 @@ function Roulette() {
       setTimeout(() => {
         navigate('/GetPremium'); // Navega para outra página após 5 segundos
         console.log("outra pagina");
-      }, 5000); // Espera 5 segundos antes de navegar
+      }, 1000); // Espera 5 segundos antes de navegar
     }, 3000); // Tempo de giro (3 segundos)
   };
   
