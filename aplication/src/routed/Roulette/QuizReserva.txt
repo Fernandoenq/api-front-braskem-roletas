@@ -175,54 +175,34 @@ function Quiz() {
   }, []); // Adicionar useEffect para definir perguntas aleatórias no início
 
   const handleAnswerClick = (answer) => {
-    if (disabledOptions) return; // Bloqueia cliques adicionais
-  
     setSelectedAnswer(answer);
-    setDisabledOptions(true); // Desativa as opções de resposta
-  
-    const isCorrect = answer === questions[currentQuestion].correct;
-  
-    // Exibe mensagem de acerto ou erro
-    if (isCorrect) {
-      setFeedbackMessage("Você acertou!");
-    } else {
-      setFeedbackMessage("Você errou!");
-    }
-  
-    // Salva a resposta selecionada
-    setAnswers((prevAnswers) => [...prevAnswers, answer]);
-  
-    // Adiciona um pequeno atraso antes de trocar de pergunta ou finalizar o quiz
+    setDisabledOptions(true); // Desabilita o clique após a seleção de uma resposta
+    setAnswers([...answers, answer]);
+
     setTimeout(() => {
-      setFeedbackMessage(""); // Limpa a mensagem de feedback
-  
       if (currentQuestion < questions.length - 1) {
-        setCurrentQuestion(currentQuestion + 1); // Passa para a próxima pergunta
-        setSelectedAnswer(""); // Limpa a seleção
-        setDisabledOptions(false); // Reativa as opções
+        setCurrentQuestion(currentQuestion + 1);
+        setSelectedAnswer(""); // Limpa a seleção para a próxima pergunta
+        setDisabledOptions(false); // Habilita as opções na próxima pergunta
       } else {
-        // Calcula a quantidade de respostas corretas
         const correctAnswers = questions.filter(
-          (question, index) => question.correct === [...answers, answer][index] // Verifica se as respostas estão corretas
+          (question, index) => question.correct === [...answers, answer][index]
         ).length;
-  
+
         // Define a imagem final com base no número de respostas corretas
         if (correctAnswers === 2) {
-          setFinalImage(parabens); // Se acertar ambas
+          setFinalImage(parabens); // Se acertar as 2, exibe parabéns
         } else if (correctAnswers === 1) {
-          setFinalImage(legal); // Se acertar uma
+          setFinalImage(legal); // Se acertar apenas 1, exibe legal
         } else {
-          setFinalImage(triste); // Se errar ambas
+          setFinalImage(triste); // Se errar as 2, exibe triste
         }
-  
-        setQuizFinished(true); // Finaliza o quiz
-      }
-    }, 1000); // Atraso de 1 segundo
-  };
-  
-  
 
-  
+        setQuizFinished(true);
+      }
+    }, 1000);
+  };
+
   const handleNavigate = () => {
     navigate('/girarroleta');
   };
@@ -247,9 +227,6 @@ function Quiz() {
     }
   };
 
-  const [feedbackMessage, setFeedbackMessage] = useState(""); // Novo estado para armazenar a mensagem de feedback
-
-
   return (
     <Box
       display="flex"
@@ -273,7 +250,7 @@ function Quiz() {
               }}
             />
           </Box>
-  
+
           <Box
             display="flex"
             flexDirection="column"
@@ -301,7 +278,7 @@ function Quiz() {
             >
               {currentQuestion + 1}. {questions[currentQuestion]?.question}
             </Typography>
-  
+
             <Box
               display="flex"
               flexDirection="row"
@@ -311,56 +288,48 @@ function Quiz() {
                 marginTop: '30px',
               }}
             >
-              <FormControlLabel
-                control={
-                  <TransparentCheckbox
-                    checked={selectedAnswer === "V"}
-                    onChange={() => handleAnswerClick("V")}
-                  />
-                }
-                label="Verdadeiro"
-                sx={{
-                  '& .MuiTypography-root': {
-                    fontSize: '2rem',
-                    color: '#000000',
+              {(selectedAnswer === "" || selectedAnswer === "V") && (
+                <FormControlLabel
+                  control={
+                    <TransparentCheckbox
+                      checked={selectedAnswer === "V"}
+                      onChange={() => handleAnswerClick("V")}
+                      disabled={selectedAnswer !== ""}
+                    />
                   }
-                }}
-              />
-  
-              <FormControlLabel
-                control={
-                  <TransparentCheckbox
-                    checked={selectedAnswer === "F"}
-                    onChange={() => handleAnswerClick("F")}
-                  />
-                }
-                label="Falso"
-                sx={{
-                  '& .MuiTypography-root': {
-                    fontSize: '2rem',
-                    color: '#000000',
+                  label="Verdadeiro"
+                  sx={{
+                    '& .MuiTypography-root': {
+                      fontSize: '2rem',
+                      color: '#000000',
+                    }
+                  }}
+                />
+              )}
+
+              {(selectedAnswer === "" || selectedAnswer === "F") && (
+                <FormControlLabel
+                  control={
+                    <TransparentCheckbox
+                      checked={selectedAnswer === "F"}
+                      onChange={() => handleAnswerClick("F")}
+                      disabled={selectedAnswer !== ""}
+                    />
                   }
-                }}
-              />
+                  label="Falso"
+                  sx={{
+                    '& .MuiTypography-root': {
+                      fontSize: '2rem',
+                      color: '#000000',
+                    }
+                  }}
+                />
+              )}
             </Box>
-  
-            {/* Texto de feedback */}
-            {feedbackMessage && (
-              <Typography
-                variant="h5"
-                sx={{
-                  marginTop: '20px',
-                  fontWeight: 'bold',
-                  color: feedbackMessage === "Você acertou!" ? "green" : "red", // Verde para acerto e vermelho para erro
-                }}
-              >
-                {feedbackMessage}
-              </Typography>
-            )}
           </Box>
         </>
       )}
-  
+
       {quizFinished && finalImage && (
         <Box
           display="flex"
@@ -388,7 +357,7 @@ function Quiz() {
               objectFit: 'cover',
             }}
           />
-  
+
           {/* Imagem de resultado (parabens, legal, triste) */}
           <img
             src={finalImage}
@@ -403,36 +372,34 @@ function Quiz() {
               objectFit: 'cover',
             }}
           />
-  
+
           {/* Botão centralizado, com posição baseada na imagem */}
           {showButton && (
-            <Button
-              onClick={handleNavigate}
-              variant="contained"
-              sx={{
-                position: 'absolute',
-                ...getButtonPosition(), 
-                transform: 'translate(-50%, -50%)',
-                backgroundColor: '#ffffff',
-                color: '#000000',
-                padding: '10px 20px',
-                fontSize: '1.5rem',
-                zIndex: 3,
-                '&:hover': {
-                  backgroundColor: '#f0f0f0',
-                },
-              }}
-            >
-              Continuar
-            </Button>
-          )}
-  
+          <Button
+            onClick={handleNavigate}
+            variant="contained"
+            sx={{
+              position: 'absolute',
+              ...getButtonPosition(), 
+              transform: 'translate(-50%, -50%)',
+              backgroundColor: '#ffffff',
+              color: '#000000',
+              padding: '10px 20px',
+              fontSize: '1.5rem',
+              zIndex: 3,
+              '&:hover': {
+                backgroundColor: '#f0f0f0',
+              },
+            }}
+          >
+            Continuar
+          </Button>
+        )}
+
         </Box>
       )}
     </Box>
   );
-  
-  
 }
 
 export default Quiz;

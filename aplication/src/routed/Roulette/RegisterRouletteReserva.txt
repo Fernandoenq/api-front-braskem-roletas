@@ -29,43 +29,9 @@ function RegisterForm() {
   const [openhandleNavigate, setOpenhandleNavigate] = useState(false);
   const [openhandleNotification, setOpenhandleNotification] = useState(false);
   const [errorMessage, setErrorMessage] = useState(''); // Para armazenar a mensagem de erro
-  const [errorImageUrl, setErrorImageUrl] = useState(''); // Para armazenar a URL da imagem de erro
-  const [isVirtualKeyboardActive, setIsVirtualKeyboardActive] = useState(false); // Estado para controlar se o teclado virtual está ativo
-  const keyboardRef = useRef();
-
-  const [isOver18, setIsOver18] = useState(false);
-  const [isUnder18, setIsUnder18] = useState(false);
-  const currentYear = new Date().getFullYear();
-
-
-// Para o checkbox +18
-const handleOver18Change = (event) => {
-  setIsOver18(event.target.checked);
-  if (event.target.checked) {
-    setIsUnder18(false);
-    setFormData({
-      ...formData,
-      birthdate: formatBirthdate('13102001'), // Data fixada em 13/10/2001
-    });
-  } else {
-    setFormData({ ...formData, birthdate: '' });
-  }
-};
-
-// Para o checkbox -18
-const handleUnder18Change = (event) => {
-  setIsUnder18(event.target.checked);
-  if (event.target.checked) {
-    setIsOver18(false);
-    setFormData({
-      ...formData,
-      birthdate: formatBirthdate('13102020'),
-    });
-  } else {
-    setFormData({ ...formData, birthdate: '' });
-  }
-};
-
+const [errorImageUrl, setErrorImageUrl] = useState(''); // Para armazenar a URL da imagem de erro
+const [isVirtualKeyboardActive, setIsVirtualKeyboardActive] = useState(false); // Estado para controlar se o teclado virtual está ativo
+const keyboardRef = useRef();
 
 
 const clearKeyboardInput = () => {
@@ -764,97 +730,45 @@ const handleInputChange = (e) => {
           }}
         />
 
-<Box
-  sx={{
-    backgroundColor: 'white', // Fundo branco
-    padding: '16px', // Espaçamento interno
-    borderRadius: '20px', // Bordas arredondadas
-    marginTop: '20px', // Espaçamento superior
-    marginBottom: '5px', // Espaçamento inferior
-    width: '100%', // Tamanho total da caixa (ajustado para se alinhar com os campos de input)
-    maxWidth: '105%', // O mesmo valor de largura dos TextFields
-  }}
->
-  <Box display="flex" alignItems="center" justifyContent="flex-start" sx={{ width: '100%' }}>
-    <Typography
-      variant="body1"
-      sx={{ 
-        fontSize: '30px', 
-        fontWeight: 'bold', 
-        color: 'black', 
-        marginRight: '30px' // Adiciona o espaçamento desejado entre o texto e as checkboxes
-      }}
-    >
-      Você tem 18 anos ou mais?
-    </Typography>
-
-    <Box display="flex" alignItems="center" sx={{ gap: '20px' }}>
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={isOver18}
-            onChange={handleOver18Change}
-            name="over18"
-            sx={{
-              transform: 'scale(2)', // Aumenta o tamanho do checkbox
-              color: 'black',
-              '&.Mui-checked': {
-                color: 'black', // Checkbox marcado também preto
+        <TextField
+          error={birthdateError}  // Define erro se a data de nascimento for inválida
+          helperText={birthdateError ? 'Data de nascimento inválida' : ''}  // Mensagem de erro
+          label="Data de Nascimento"
+          variant="outlined"
+          margin="normal"
+          name="birthdate"
+          value={formData.birthdate}
+          onFocus={() => handleInputFocus('birthdate')}
+          onChange={handleInputChange}
+          onBlur={handleBirthdateBlur}  // Valida quando o campo perder o foco
+          fullWidth
+          sx={{
+            width: '105%',
+            marginBottom: '5px',
+            '& .MuiOutlinedInput-root': {
+              '& input': {
+                color: 'black', // Cor do texto
+                fontSize: '2.2rem', // Tamanho maior do texto
+                backgroundColor: 'white', // Fundo branco dentro do campo de input
+                borderRadius: '20px', // Aplicar o raio de borda ao campo de input
               },
-            }}
-          />
-        }
-        label="Sim"
-        labelPlacement="end"
-        sx={{ 
-          color: 'black',
-          '& .MuiFormControlLabel-label': {
-            marginLeft: '10px', // Adiciona espaçamento entre o checkbox e o texto
-          }
-        }}
-        componentsProps={{
-          typography: {
-            fontSize: '30px', // Ajusta o tamanho do texto diretamente
-            color: 'black',
-          },
-        }}
-      />
-
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={isUnder18}
-            onChange={handleUnder18Change}
-            name="under18"
-            sx={{
-              transform: 'scale(2)', // Aumenta o tamanho do checkbox
-              color: 'black',
-              '&.Mui-checked': {
-                color: 'black', // Checkbox marcado também preto
+              '& fieldset': {
+                borderColor: 'black', // Cor da borda
+                borderRadius: '20px', // Raio da borda
               },
-            }}
-          />
-        }
-        label="Não"
-        labelPlacement="end"
-        sx={{ 
-          color: 'black',
-          '& .MuiFormControlLabel-label': {
-            marginLeft: '10px', // Adiciona espaçamento entre o checkbox e o texto
-          }
-        }}
-        componentsProps={{
-          typography: {
-            fontSize: '30px', // Ajusta o tamanho do texto diretamente
-            color: 'black',
-          },
-        }}
-      />
-    </Box>
-  </Box>
-</Box>
-
-
+              '&:hover fieldset': {
+                borderColor: 'black', // Cor da borda ao passar o mouse
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: 'black', // Cor da borda ao focar no campo
+              },
+            },
+            '& .MuiInputLabel-root': {
+              color: 'black', // Cor da label
+              fontSize: '2rem', // Tamanho da label
+            },
+          }}
+        />
 
 
         <TextField
@@ -908,42 +822,46 @@ const handleInputChange = (e) => {
       }}
     >
       <Typography variant="body2" sx={{ color: 'black', fontSize: '12px', textAlign: 'justify' }}>
-  A Braskem respeita e cumpre as exigências previstas na Lei nº 13.709/2018 (LGPD) que dispõe
-  sobre a proteção de dados pessoais zelando pelos seus dados pessoais. Os dados fornecidos
-  serão utilizados para a finalidade de cadastro, participação e pesquisa de satisfação da ação
-  promocional da Braskem no Rock in Rio 2024, sendo restritas às pessoas devidamente
-  autorizadas, assegurando a Braskem, na condição de controladora, a sua privacidade e segurança
-  no armazenamento. Você poderá obter mais informações sobre o tratamento dos seus dados
-  pessoais na nossa política de privacidade disponível em https://www.braskem.com.br/politica-de-privacidade.
-</Typography>
+        A Braskem respeita e cumpre as exigências previstas na Lei nº 13.709/2018 (LGPD) que dispõe
+        sobre a proteção de dados pessoais zelando pelos seus dados pessoais. Os dados fornecidos
+        serão utilizados para a finalidade de cadastro, participação e pesquisa de satisfação da ação
+        promocional da Braskem no Rock in Rio 2024, sendo restritas às pessoas devidamente
+        autorizadas, assegurando a Braskem, na condição de controladora, a sua privacidade e segurança
+        no armazenamento. Você poderá obter mais informações sobre o tratamento dos seus dados
+        pessoais na nossa política de privacidade disponível em{' '}
+        <a href="https://www.braskem.com.br/politica-de-privacidade" target="_blank" rel="noopener noreferrer">
+          https://www.braskem.com.br/politica-de-privacidade
+        </a>.
+      </Typography>
 
-<Typography variant="body2" sx={{ color: 'black', fontSize: '12px', textAlign: 'justify', marginTop: '8px' }}>
-  Caso queira, você também poderá ficar por dentro das ações e campanhas promocionais da Braskem através dos
-  contatos informados, selecionando o item disponível abaixo:
-</Typography>
+      <Typography variant="body2" sx={{ color: 'black', fontSize: '12px', textAlign: 'justify', marginTop: '8px' }}>
+        Caso queira, você também poderá ficar por dentro das ações e campanhas promocionais da Braskem através dos
+        contatos informados, selecionando o item disponível abaixo:
+      </Typography>
 
-<FormControlLabel
-  control={
-    <Checkbox 
-      color="primary" 
-      checked={acceptTerms} // O valor do checkbox está ligado ao estado
-      onChange={(e) => setAcceptTerms(e.target.checked)} // Atualiza o estado quando o usuário marca/desmarca
-      sx={{
-        color: 'black', // Cor do quadrado quando desmarcado
-        '&.Mui-checked': {
-          color: '#4caf50', // Cor do quadrado quando marcado
-        },
-      }}
-    />
-  }
-  label="Aceito receber comunicações da Braskem sobre reciclagem e sustentabilidade."
-  sx={{ marginTop: '8px', color: 'black', fontSize: '12px' }}
-/>
+      <FormControlLabel
+        control={
+          <Checkbox 
+            color="primary" 
+            checked={acceptTerms} // O valor do checkbox está ligado ao estado
+            onChange={(e) => setAcceptTerms(e.target.checked)} // Atualiza o estado quando o usuário marca/desmarca
+            sx={{
+              color: 'black', // Cor do quadrado quando desmarcado
+              '&.Mui-checked': {
+                color: '#4caf50', // Cor do quadrado quando marcado
+              },
+            }}
+          />
+        }
+        label="Aceito receber comunicações da Braskem sobre reciclagem e sustentabilidade."
+        sx={{ marginTop: '8px', color: 'black', fontSize: '12px' }}
+      />
 
-<Typography variant="body2" sx={{ color: 'black', fontSize: '12px', textAlign: 'justify', marginTop: '8px' }}>
-  *Você poderá pedir a exclusão sobre as comunicações e ações promocionais a qualquer momento através do endereço de e-mail data_protection@braskem.com.
-</Typography>
 
+      <Typography variant="body2" sx={{ color: 'black', fontSize: '12px', textAlign: 'justify', marginTop: '8px' }}>
+        *Você poderá pedir a exclusão sobre as comunicações e ações promocionais a qualquer momento através do endereço de e-mail{' '}
+        <a href="mailto:data_protection@braskem.com">data_protection@braskem.com</a>.
+      </Typography>
     </Box>
 
         
